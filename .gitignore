@@ -1,5 +1,11 @@
-.DS_Store
 .vagrant
 regulations-core/
 regulations-parser/
 regulations-site/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*~
+*.swp
