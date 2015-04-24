@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source /usr/local/bin/virtualenvwrapper.sh
-git clone https://github.com/18f/regulations-parser
-git clone https://github.com/18f/regulations-core
-git clone https://github.com/18f/regulations-site
+git clone https://github.com/cfpb/regulations-parser
+git clone https://github.com/cfpb/regulations-core
+git clone https://github.com/cfpb/regulations-site
+git clone https://github.com/cfpb/fr-notices.git
 mkvirtualenv reg-parser
 mkvirtualenv reg-core
 mkvirtualenv reg-site
