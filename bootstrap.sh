@@ -6,7 +6,6 @@ apt-get install git -y
 apt-get install python-dev -y
 apt-get install python-pip -y
 apt-get install libxml2-dev libxslt1-dev zlib1g-dev -y
-apt-get install pypy-dev -y 
 
 # Install Python dependencies
 pip install virtualenv
