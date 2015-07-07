@@ -48,6 +48,28 @@ Once you have these requirements installed you can run the
 This will clone all of the eRegs repositories, make seperate virtualenvs 
 for them, and setup their dependencies.
 
+You also have the option of only bootstrapping specific components of
+eRegulations. For example:
+
+```shell
+./regs_bootstrap.sh -b core -b site
+```
+
+This will bootstrap just the API (`core`) and the site, without the
+parser. This would be useful for serving regulations that have already
+been parsed (which then just need to be added to the API).
+
+`regs_bootstrap.sh` takes the following arguments:
+
+* `-v`, verbose output. The output of all commands will be provided
+  regardless of success or failure
+* `-d`, set Django debug flags to true in regulations-core and
+  regulations-site.
+* `-c [URL]`, API url to configure for regulations-parser and
+  regulations-site
+* `-b [...]` component to bootstrap, either `parser`, `core`, or `site`.
+  This can be provided up to three times.
+
 ## Bootstrap with Vagrant
 
 To bootstrap eRegs in a [Vagrant](https://www.vagrantup.com/) virtual 
