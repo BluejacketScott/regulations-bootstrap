@@ -162,10 +162,10 @@ bootstrap_site() {
 
 usage() { 
     echo "Usage: $0 [-v] [-d] [-c http://api-url] [-b component] [-b ...]" 1>&2
-    echo "      -v  verbose — outputs individual commands as they happen" 1>&2
-    echo "      -d  set Django debug flags to true" 1>&2
-    echo "      -c  API url to configure for parser and site" 1>&2
-    echo "      -b  component to bootstrap, either parser, core, or site" 1>&2
+    echo "      -v          verbose — outputs individual commands as they happen" 1>&2
+    echo "      -d          set Django debug flags to true" 1>&2
+    echo "      -c [URL]    API url to configure for parser and site" 1>&2
+    echo "      -b [...]    component to bootstrap, either parser, core, or site" 1>&2
     exit 1
 }
 
