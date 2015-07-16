@@ -117,7 +117,7 @@ for example, you would do the following:
 ```shell
 workon reg-parser
 cd /vagrant/regulations-parser
-./build_from.py ../fr-notices/annual/CFR-2012-title12-vol8-part1026.xml 12 2011-31715 15 1601
+./build_from.py ../fr-notices/annual/CFR-2012-title12-vol8-part1026.xml 12 15 1601
 ```
 
 Once completed, the JSON for this regulation can be browsed in
