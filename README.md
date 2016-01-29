@@ -1,19 +1,43 @@
 # regulations-bootstrap
 
-[eRegulations](http://cfpb.github.io/eRegulations) is a web-based tool that makes regulations easier to find, read and understand with features such as inline official interpretations, highlighted defined terms, and a revision comparison view.
+[eRegulations](http://cfpb.github.io/eRegulations) is a web-based tool 
+that makes regulations easier to find, read and understand with 
+features such as inline official interpretations, highlighted defined 
+terms, and a revision comparison view.
 
-eRegs is made up of three core components:
+eRegs is made up of several core components for parsing and serving
+regulations:
 
-* [regulations-parser](https://github.com/cfpb/regulations-parser): Parse regulations
+Parsing:
+
+* [regulations-parser](https://github.com/cfpb/regulations-parser): Parse eCFR regulations
+* [regulations-schema](https://github.com/cfpb/regulations-schema): RegML schema definition
+* [regulations-xml-parser](https://github.com/cfpb/regulations-xml-parser): Parse RegML regulations
+
+Serving:
+
 * [regulations-core](https://github.com/cfpb/regulations-core): Regulations API
 * [regulations-site](https://github.com/cfpb/regulations-site): Display the regulations
 
-This repository contains scripts that boostrap a coherent eRegulations working envionrment, either locally or in a [Vagrant](https://www.vagrantup.com/) virtual machine.
+Regulation Content:
+
+* [fr-notices](https://github.com/cfpb/fr-notices): eCFR XML for CFPB regulations
+* [regulations-xml](https://github.com/cfpb/regulations-xml): RegML for CFPB regulations 
+* [regulations-stub](https://github.com/cfpb/regulations-stub): eRegs JSON for CFPB regulations
+
+This repository contains scripts that boostrap a coherent eRegulations 
+working envionrment, either locally or in a 
+[Vagrant](https://www.vagrantup.com/) virtual machine.
 
 ## Bootstrap Locally
 
 To bootstrap a local (i.e. not virtualized) eRegs environment, you'll
-need to install Python's virtualenv and virtualenvwrapper. 
+need to install Python's 
+[virtualenv](https://virtualenv.readthedocs.org/en/latest/) 
+and 
+[virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/), 
+as well as
+[Node's Version Management](https://github.com/creationix/nvm).
 
 ### Requirements
 
@@ -111,18 +135,31 @@ Before you can use regulations-site to browse any regulations, you'll
 need to parse some with regulations-parser. To do this you'll need to
 SSH into the virtual machine and run the parser. 
 
-To parse the [CFPB's Regulation E](http://www.consumerfinance.gov/eregulations/1005), 
-for example, you would do the following:
+To parse the [CFPB's Regulation D](http://www.consumerfinance.gov/eregulations/1004), 
+from eCFR, for example, you would do the following:
 
 ```shell
-workon reg-parser
-cd /vagrant/regulations-parser
-./build_from.py ../fr-notices/annual/CFR-2012-title12-vol8-part1026.xml 12 15 1601
+workon regparser
+cd /vagrant/regulations-xml-parser
+./regml.py ecfr 12 ../fr-notices/annual/CFR-2012-title12-vol8-part1004.xml
+./regml.py json 12 1004
+```
+
+This will put eRegs JSON for Regulation D in `regulations-stub/stub`. You can
+load that JSON into the API using regulation-stub's `send_to.py`
+script or `regulation-core`'s `import_reg` command. 
+
+```shell
+cd /vagrant/regulations-stub
+./send_to.py -a http://localhost:8000/ -r 1004
 ```
 
 Once completed, the JSON for this regulation can be browsed in
 regulations-core at [http://localhost:8000](http://localhost:8000) and
 can be viewed in regulations-site at [http://localhost:8001](http://localhost:8001).
+
+For more information on parsing regulations, please see the 
+[regulations-xml-parser README](https://github.com/cfpb/regulations-xml-parser/blob/master/README.md)
 
 Because all of the components are stored in your Vagrant project
 directory you can use your favorite IDE or editor to work on them and
