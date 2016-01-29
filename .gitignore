@@ -3,6 +3,10 @@ regulations-core/
 regulations-parser/
 regulations-site/
 regulations-stub/
+regulations-schema/
+regulations-xml/
+regulations-xml-parser/
+regulations-configs/
 fr-notices/
 .DS_Store
 .DS_Store?
