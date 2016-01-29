@@ -244,6 +244,7 @@ if [ -z $PS1 ]; then
         echo "    $ cd regulations-xml-parser"
         echo "    $ workon regparser"
         echo "Please see the parser documentation for more information."
+        echo "https://github.com/cfpb/regulations-xml-parser/blob/master/README.md"
         echo 
     fi
     if [[ $COMPONENTS == *"core"* ]]; then
