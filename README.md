@@ -41,6 +41,8 @@ as well as
 
 ### Requirements
 
+#### Python virtualenv
+
 Install [virtualenv](https://virtualenv.pypa.io/en/latest/):
 
 ```shell
@@ -59,6 +61,31 @@ export WORKON_HOME=~/envs
 mkdir -p $WORKON_HOME
 source `which virtualenvwrapper.sh`
 ```
+
+#### Node dependencies (nvm, grunt)
+
+Install [nvm](https://github.com/creationix/nvm) using nvm's 
+[install script](https://github.com/creationix/nvm#install-script).
+
+The nvm [nvm](https://github.com/creationix/nvm/blob/master/README.markdown) 
+gives more detail about how to use nvm. For now, you can simply run the
+following (and add them to your shell's configuration file):
+
+```
+export NVM_DIR="$HOME/.nvm"
+source $NVM_DIR/nvm.sh
+```
+
+regulations-site requires Node 4, grunt, and browserify, so use `nvm` 
+to install and use Node, and then install the later two using npm:
+
+
+```
+nvm install 4
+nvm use 4
+npm install -g grunt-cli browserify
+```
+
 
 ### Bootstrapping
 

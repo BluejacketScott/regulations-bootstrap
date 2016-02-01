@@ -152,6 +152,10 @@ setup_site() {
     workon regsite
     cd regulations-site
     pip install -r requirements.txt -r requirements_test.txt
+
+    # Setup front-end
+    nvm install 4
+    nvm use 4
     sh ./frontendbuild.sh
 
     cp regulations/settings/base.py regulations/settings/local_settings.py
