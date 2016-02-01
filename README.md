@@ -69,7 +69,7 @@ Install [nvm](https://github.com/creationix/nvm) using nvm's
 
 The nvm [nvm](https://github.com/creationix/nvm/blob/master/README.markdown) 
 gives more detail about how to use nvm. For now, you can simply run the
-following (and add them to your shell's configuration file):
+following (and add them to your shell's profile or run commands file):
 
 ```
 export NVM_DIR="$HOME/.nvm"
