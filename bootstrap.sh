@@ -34,7 +34,7 @@ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 # Setup Node nvm
 echo "export NVM_DIR=/opt/nvm" >> ~/.bashrc
-echo "source $NVM_DIR/nvm.sh" >> ~/.bashrc
+echo "source /opt/nvm/nvm.sh" >> ~/.bashrc
 
 source ~/.bashrc
 
