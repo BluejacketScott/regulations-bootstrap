@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 COMPONENTS=""
-API_BASE="http://localhost:8000"
+API_BASE="http://localhost:8000/"
 DEBUG=false
 VERBOSE=false
 SETUP_ERRORS=false
@@ -162,7 +162,7 @@ setup_site() {
     if $DEBUG; then
         sed -i -e 's|^DEBUG = False|DEBUG = True|' regulations/settings/local_settings.py
     fi
-    sed -i -e "s|API_BASE = ''|API_BASE = '$API_BASE'|" regulations/settings/local_settings.py
+    sed -i -e "s|API_BASE = os.environ.get('EREGS_API_BASE', '')|API_BASE = '$API_BASE'|" regulations/settings/local_settings.py
     cd ..
 }
 
