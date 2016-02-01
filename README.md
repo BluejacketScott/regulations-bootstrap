@@ -25,6 +25,11 @@ Regulation Content:
 * [regulations-xml](https://github.com/cfpb/regulations-xml): RegML for CFPB regulations 
 * [regulations-stub](https://github.com/cfpb/regulations-stub): eRegs JSON for CFPB regulations
 
+The following diagram should give a rough idea of what the relationships
+between these repositories are in the CFPB eRegs workflow.
+
+![eRegulations Repositories/Components](eregulations.png)
+
 This repository contains scripts that boostrap a coherent eRegulations 
 working envionrment, either locally or in a 
 [Vagrant](https://www.vagrantup.com/) virtual machine.
