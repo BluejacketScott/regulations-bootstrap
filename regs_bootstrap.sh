@@ -118,6 +118,7 @@ test_core() {
     # Run core's tests
     workon regcore
     cd regulations-core
+    python manage.py test
 }
 
 bootstrap_core() {
@@ -165,6 +166,9 @@ test_site() {
     # Run site's tests
     workon regsite
     cd regulations-site
+    python manage.py test
+    # The front-end tests run with `grunt build` already
+    # grunt test-js
 }
 
 bootstrap_site() {
