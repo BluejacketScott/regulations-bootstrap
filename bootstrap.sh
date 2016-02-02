@@ -15,13 +15,13 @@ pip install virtualenvwrapper
 curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.30.2/install.sh | NVM_DIR="/opt/nvm" bash
 export NVM_DIR=/opt/nvm
 source $NVM_DIR/nvm.sh
-nvm install 4
-nvm use 4
-npm install -g grunt-cli browserify
 
-# mkdir /opt/nodejs && cd /opt/nodejs && curl -L -s http://nodejs.org/dist/v0.12.2/node-v0.12.2-linux-x64.tar.gz | tar --strip-components 1 -xz
-# Install Node dependencies
-# /opt/nodejs/bin/npm install -g grunt-cli bower browserify 
+# Install node 4
+nvm install 4
+nvm alias default 4
+
+# Update npm and install grunt
+npm install -g npm grunt-cli 
 
 # Setup eRegs environment
 sudo su vagrant <<'EOF'
