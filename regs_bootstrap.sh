@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 COMPONENTS=""
-API_BASE="http://localhost:8000"
+API_BASE="http://localhost:8000/"
 DEBUG=false
 VERBOSE=false
 SETUP_ERRORS=false
@@ -32,23 +32,28 @@ try_to() {
 clone_parser() {
     # For the parser clone regulations-parser, regulations-sub, and
     # fr-notices so that the JSON and XML are both also available.
-    git clone https://github.com/cfpb/regulations-parser
+    git clone -b xml-writer-devel https://github.com/cfpb/regulations-parser
+    git clone https://github.com/cfpb/regulations-configs
+    git clone https://github.com/cfpb/fr-notices
+    git clone https://github.com/cfpb/regulations-schema
+    git clone https://github.com/cfpb/regulations-xml
+    git clone https://github.com/cfpb/regulations-xml-parser
     git clone https://github.com/cfpb/regulations-stub
-    git clone https://github.com/cfpb/fr-notices.git
 }
 
 make_parser_virtualenv() {
     # Make the virtualenvs
-    mkvirtualenv reg-parser
-    mkvirtualenv reg-stub
+    mkvirtualenv --python `which python2.7` regparser
 }
 
 setup_parser() {
     # Setup the parser
-    cd regulations-parser
-    workon reg-parser
-    pip install -r requirements.txt
-    pip install -r requirements_test.txt
+    workon regparser
+    pip install -e regulations-parser -e regulations-configs
+    cd regulations-xml-parser
+    pip install -r requirements.txt -r requirements_test.txt
+
+    # XXX: XML parser should use these
     cat << 'EOF' >> local_settings.py
 # Uncoment the following line to write directly to regulations-core
 API_BASE = "$API_BASE"
@@ -62,9 +67,15 @@ EOF
 
     # Setup the stub folder
     cd ../regulations-stub
-    workon reg-stub
     pip install -r requirements.txt
     cd ..
+}
+
+test_parser() {
+    # Run the parser's tests
+    workon regparser
+    cd regulations-xml-parser
+    tox
 }
 
 bootstrap_parser() {
@@ -76,6 +87,7 @@ bootstrap_parser() {
     try_to 'cloning parser repositories' clone_parser
     try_to 'making parser virtualenvs' make_parser_virtualenv
     try_to 'setting up parser' setup_parser
+    try_to 'testing parser' test_parser 
 
     if [ $? -ne 0 ]; then
         SETUP_ERRORS=true
@@ -89,18 +101,24 @@ clone_core() {
 }
 
 make_core_virtualenv() {
-    mkvirtualenv reg-core
+    mkvirtualenv --python `which python2.7` regcore
 }
     
 setup_core() {
     # Setup the API
+    workon regcore
     cd regulations-core
-    workon reg-core
-    pip install zc.buildout
-    buildout
-    ./bin/django syncdb
-    ./bin/django migrate
+    pip install -r requirements.txt -r requirements_test.txt
+    python manage.py syncdb
+    python manage.py migrate
     cd ..
+}
+
+test_core() {
+    # Run core's tests
+    workon regcore
+    cd regulations-core
+    python manage.py test
 }
 
 bootstrap_core() {
@@ -112,6 +130,7 @@ bootstrap_core() {
     try_to 'cloning core repository' clone_core
     try_to 'making core virtualenv' make_core_virtualenv
     try_to 'setting up core' setup_core
+    try_to 'testing core' test_core
 
     if [ $? -ne 0 ]; then
         SETUP_ERRORS=true
@@ -125,22 +144,35 @@ clone_site() {
 }
 
 make_site_virtualenv() {
-    mkvirtualenv reg-site
+    mkvirtualenv --python `which python2.7` regsite
 }
 
 setup_site() {
     # Setup the front-end site
+    workon regsite
     cd regulations-site
-    workon reg-site
-    pip install zc.buildout
-    buildout
+    pip install -r requirements.txt -r requirements_test.txt
+
+    # Setup front-end
+    nvm install 4
+    nvm use 4
     sh ./frontendbuild.sh
+
     cp regulations/settings/base.py regulations/settings/local_settings.py
     if $DEBUG; then
         sed -i -e 's|^DEBUG = False|DEBUG = True|' regulations/settings/local_settings.py
     fi
-    sed -i -e "s|API_BASE = ''|API_BASE = '$API_BASE'|" regulations/settings/local_settings.py
+    sed -i -e "s|API_BASE = os.environ.get('EREGS_API_BASE', '')|API_BASE = '$API_BASE'|" regulations/settings/local_settings.py
     cd ..
+}
+
+test_site() {
+    # Run site's tests
+    workon regsite
+    cd regulations-site
+    python manage.py test
+    # The front-end tests run with `grunt build` already
+    # grunt test-js
 }
 
 bootstrap_site() {
@@ -152,6 +184,7 @@ bootstrap_site() {
     try_to 'cloning site repository' clone_site
     try_to 'making site virtualenv' make_site_virtualenv
     try_to 'setting up site' setup_site
+    try_to 'testing site' test_site
 
     if [ $? -ne 0 ]; then
         SETUP_ERRORS=true
@@ -200,6 +233,7 @@ fi
 
 # Perform the bootstrap process
 
+# bootstrap_parser
 bootstrap_parser
 bootstrap_core
 bootstrap_site
@@ -215,25 +249,25 @@ if [ -z $PS1 ]; then
 
     if [[ $COMPONENTS == *"parser"* ]]; then
         echo "`tput bold`To use the parser:`tput sgr0`"
-        echo "    $ cd regulations-parser"
-        echo "    $ workon reg-parser"
-        echo "    $ ./build_from.py [XML FILE] [TITLE] [ACT TITLE] [ACT SECTION]"
-        echo "Please see the parser documentation for more information."
+        echo "    $ cd regulations-xml-parser"
+        echo "    $ workon regparser"
+        echo "      Please see the parser documentation for more information."
+        echo "      https://github.com/cfpb/regulations-xml-parser/blob/master/README.md"
         echo 
     fi
     if [[ $COMPONENTS == *"core"* ]]; then
         echo "`tput bold`To use the API:`tput sgr0`"
         echo "    $ cd regulations-core"
-        echo "    $ workon reg-core"
-        echo "    $ ./bin/django runserver 0.0.0.0:8000"
+        echo "    $ workon regcore"
+        echo "    $ python manage.py runserver 0.0.0.0:8000"
         echo 
         
     fi
     if [[ $COMPONENTS == *"site"* ]]; then
         echo "`tput bold`To use the site:`tput sgr0`"
         echo "    $ cd regulations-site"
-        echo "    $ workon reg-site"
-        echo "    $ ./bin/django runserver 0.0.0.0:8001"
+        echo "    $ workon regsite"
+        echo "    $ python manage.py runserver 0.0.0.0:8001"
         echo 
     fi
 fi

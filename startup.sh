@@ -8,11 +8,11 @@ cd /vagrant
 
 # Startup regulations-core
 cd regulations-core
-workon reg-core
-nohup ./bin/django runserver 0.0.0.0:8000 &
+workon regcore
+nohup python manage.py runserver 0.0.0.0:8000 &
 
 # Startup regulations-site
 cd ../regulations-site
-workon reg-site
-nohup ./bin/django runserver 0.0.0.0:8001 &
+workon regsite
+nohup python manage.py runserver 0.0.0.0:8001 &
 
