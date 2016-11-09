@@ -31,7 +31,7 @@ between these repositories are in the CFPB eRegs workflow.
 ![eRegulations Repositories/Components](eregulations.png)
 
 This repository contains scripts that boostrap a coherent eRegulations 
-working envionrment, either locally or in a 
+working environment, either locally or in a 
 [Vagrant](https://www.vagrantup.com/) virtual machine.
 
 ## Bootstrap Locally
